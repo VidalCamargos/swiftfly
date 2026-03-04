@@ -2,22 +2,21 @@
 
 namespace Database\Factories;
 
+use App\Enums\TravelOrder\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Testing\WithFaker;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TravelOrder>
- */
 class TravelOrderFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    use WithFaker;
+
     public function definition(): array
     {
         return [
-            //
+            'destination' => $this->faker->word(),
+            'departure_date' => now(),
+            'requester_name' => $this->faker->name(),
+            'status' => Status::APPROVED,
         ];
     }
 }
