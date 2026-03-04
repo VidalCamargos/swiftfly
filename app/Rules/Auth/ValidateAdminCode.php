@@ -9,8 +9,8 @@ class ValidateAdminCode implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if ($value !== env('ADMIN_CODE')) {
-            $fail('validation.custom.auth.invalid-admin-code')->translate();
+        if ($value !== config('app.admin_code')) {
+            $fail('validation.custom.auth.invalid_admin_code')->translate();
         }
     }
 }

@@ -179,8 +179,8 @@ return [
     */
 
     'custom' => [
-        'auth' => [
-            'invalid-admin-code' => 'Admin code is invalid!',
+        'attribute-name' => [
+            'rule-name' => 'custom-message',
         ],
     ],
 
