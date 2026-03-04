@@ -10,7 +10,7 @@ done
 # Check if the initialization flag file exists
 if [ ! -f /var/www/.docker_setup_completed ]; then
   echo "First-time initialization: setting up Swiftfly..."
-  
+
   if [ ! -f .env ]; then
     echo "Copying .env.example file..."
     cp .env.example .env
@@ -29,7 +29,7 @@ if [ ! -f /var/www/.docker_setup_completed ]; then
   fi
 
   echo "Running migrations and seeding the database..."
-  php artisan migrate --seed --force
+  php artisan migrate:fresh --seed --force
 
   # Adjust permissions for storage (ignore errors if folder doesn't exist yet)
   chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache 2>/dev/null || true
