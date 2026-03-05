@@ -12,7 +12,7 @@ enum Status: string
 
     case CANCELED = 'canceled';
 
-    case PENDING = 'pending';
+    case REQUESTED = 'requested';
 
     public function isApproved(): bool
     {

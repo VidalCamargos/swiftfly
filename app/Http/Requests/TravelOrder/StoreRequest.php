@@ -15,4 +15,14 @@ class StoreRequest extends FormRequest
             'return_date' => ['sometimes', 'date_format:Y-m-d H:i:s', 'after:departure_date'],
         ];
     }
+
+    #[Override]
+    public function validated($key = null, $default = null): array
+    {
+        $validated = parent::validated();
+
+        $validated['requester_name'] = auth()->user()->name;
+
+        return data_get($validated, $key, $default);
+    }
 }
