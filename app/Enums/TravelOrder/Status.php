@@ -10,7 +10,17 @@ enum Status: string
 
     case APPROVED = 'approved';
 
-    case PENDING = 'pending';
-
     case CANCELED = 'canceled';
+
+    case REQUESTED = 'requested';
+
+    public function isApproved(): bool
+    {
+        return $this === self::APPROVED;
+    }
+
+    public static function possibleUpdateStatus(): array
+    {
+        return [self::APPROVED->value, self::CANCELED->value];
+    }
 }

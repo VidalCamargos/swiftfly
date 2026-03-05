@@ -1,10 +1,9 @@
 <?php
 
-namespace Feature\Controllers\Auth;
+namespace tests\Feature\Controllers\Auth;
 
 use App\Models\User;
 use App\Services\Auth\JwtService;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Iterator;
 use Override;

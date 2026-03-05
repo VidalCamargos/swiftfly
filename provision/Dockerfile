@@ -5,6 +5,7 @@ WORKDIR /var/www
 RUN apk add --no-cache \
     bash \
     curl \
+    oniguruma-dev \
     libzip-dev \
     zlib-dev \
     unzip \
@@ -13,6 +14,7 @@ RUN apk add --no-cache \
 RUN docker-php-ext-install -j$(nproc) \
     pdo \
     pdo_mysql \
+    mbstring \
     zip
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" \
