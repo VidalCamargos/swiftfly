@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TravelOrder;
 
 use App\Http\Controllers\Controller;
 use App\Http\Queries\TravelOrder\TravelOrderQuery;
+use App\Http\Requests\TravelOrder\IndexRequest;
 use App\Http\Requests\TravelOrder\StoreRequest;
 use App\Http\Requests\TravelOrder\UpdateRequest;
 use App\Http\Resources\TravelOrderResource;
@@ -20,13 +21,12 @@ class TravelOrderController extends Controller
     {
     }
 
-    public function index(Request $request, TravelOrderQuery $travelOrderQuery)
+    public function index(IndexRequest $request, TravelOrderQuery $travelOrderQuery)
     {
         $this->authorize('viewAny', TravelOrder::class);
 
         return TravelOrderResource::collection(
             $travelOrderQuery->simplePaginate($request->input('limit', 10))
-                ->appends($request->query()),
         );
     }
 
