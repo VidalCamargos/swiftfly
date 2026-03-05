@@ -25,6 +25,6 @@ class TravelOrderPolicy
 
     public function update(User $user, TravelOrder $travelOrder): bool
     {
-        return $user->is_admin;
+        return (bool) $user->is_admin;
     }
 }

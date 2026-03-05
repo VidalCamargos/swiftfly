@@ -22,11 +22,9 @@ if [ ! -f /var/www/.docker_setup_completed ]; then
   echo "Setting up the project key..."
   php artisan key:generate
 
-  # Only run JWT secret generation if the package is installed
-  if grep -q "tymon/jwt-auth" composer.json; then
-    echo "Setting up the JWT Secret..."
-    php artisan jwt:secret
-  fi
+  # Run JWT secret generation
+  echo "Setting up the JWT Secret..."
+  php artisan jwt:secret
 
   echo "Running migrations and seeding the database..."
   php artisan migrate:fresh --seed --force

@@ -35,7 +35,7 @@ class TravelOrderController extends Controller
         $this->authorize('view', [TravelOrder::class, $travelOrder]);
 
         return TravelOrderResource::make(
-            $travelOrderQuery->where('id', $travelOrder)->first()
+            $travelOrderQuery->where('id', $travelOrder->id)->firstOrFail()
         );
     }
 
@@ -45,14 +45,16 @@ class TravelOrderController extends Controller
 
         $travelOrder = $this->auth->user()->travelOrders()->create($request->validated());
 
-        return TravelOrderResource::make($travelOrder);
+        return TravelOrderResource::make($travelOrder)
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function update(UpdateRequest $request, TravelOrder $travelOrder)
     {
-        $this->authorize('viewAny', [TravelOrder::class, $travelOrder]);
+        $this->authorize('update', [TravelOrder::class, $travelOrder]);
 
-       $travelOrder->update($request->validated());
+        $travelOrder->update($request->validated());
 
         return TravelOrderResource::make($travelOrder);
     }
