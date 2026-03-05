@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\TravelOrder\Status;
 use App\Events\TravelOrder\Creating;
+use App\Events\TravelOrder\Updated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,7 @@ class TravelOrder extends Model
 
     protected $dispatchesEvents = [
         'creating' => Creating::class,
+        'updated' => Updated::class,
     ];
 
     protected function casts(): array
