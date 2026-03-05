@@ -22,35 +22,18 @@ class TravelOrderStatusChangedNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        $travelOrderStatusKey = $this->travelOrder->status?->value;
-        $travelOrderStatusTranslationKey = $travelOrderStatusKey === null
-            ? null
-            : "notifications.travel_order.status.{$travelOrderStatusKey}";
+        $travelOrderStatusText = __('notifications.travel_order.status.'.$this->travelOrder->status->value);
 
-        $travelOrderStatusText = $travelOrderStatusTranslationKey === null
-            ? ''
-            : __($travelOrderStatusTranslationKey);
-
-        if ($travelOrderStatusTranslationKey !== null && $travelOrderStatusText === $travelOrderStatusTranslationKey) {
-            $travelOrderStatusText = $travelOrderStatusKey ?? '';
-        }
-
-        $mailSubject = __('notifications.travel_order.status_changed.subject', [
-            'status' => $travelOrderStatusText,
-        ]);
-
-        $mailDescription = __('notifications.travel_order.status_changed.description', [
-            'status' => $travelOrderStatusText,
-        ]);
-
-        $mailGreeting = __('notifications.common.greeting', [
-            'name' => $notifiable->name,
-        ]);
-
-        return (new MailMessage())
-            ->subject($mailSubject)
-            ->greeting($mailGreeting)
-            ->line($mailDescription)
+        return new MailMessage()
+            ->subject(__('notifications.travel_order.status_changed.subject', [
+                'status' => $travelOrderStatusText,
+            ]))
+            ->greeting(__('notifications.common.greeting', [
+                'name' => $notifiable->name,
+            ]))
+            ->line(__('notifications.travel_order.status_changed.description', [
+                'status' => $travelOrderStatusText,
+            ]))
             ->line(__('notifications.common.closing'));
     }
 }
