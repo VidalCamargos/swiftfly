@@ -249,13 +249,15 @@ class TravelOrderControllerTest extends TestCase
         $approved = $this->createTravelOrder($this->user, [
             'status' => Status::APPROVED,
             'destination' => 'Rio de Janeiro',
-            'departure_date' => now()->addDays(10),
+            'departure_date' => Carbon::parse('2099-01-01 00:00:00'),
+            'return_date' => Carbon::parse('2099-01-10 00:00:00'),
         ]);
 
         $requested = $this->createTravelOrder($this->user, [
             'status' => Status::REQUESTED,
             'destination' => 'Sao Paulo',
-            'departure_date' => now()->addDays(11),
+            'departure_date' => Carbon::parse('2099-01-02 00:00:00'),
+            'return_date' => Carbon::parse('2099-01-11 00:00:00'),
         ]);
 
         $created = [
@@ -289,6 +291,15 @@ class TravelOrderControllerTest extends TestCase
             [
                 'filter' => [
                     'destination' => 'rio',
+                ],
+            ],
+            ['approved'],
+        ];
+
+        yield 'filter by return_end_date' => [
+            [
+                'filter' => [
+                    'return_end_date' => Carbon::parse('2099-01-10 00:00:00')->format('Y-m-d H:i:s'),
                 ],
             ],
             ['approved'],

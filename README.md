@@ -1,59 +1,125 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SwiftFly API (Laravel + JWT)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API REST para gerenciamento de pedidos de viagem com autenticação JWT.
 
-## About Laravel
+## Sobre o projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+O SwiftFly é uma API REST desenvolvida em Laravel 12 com PHP 8.4, projetada para gerenciar pedidos de viagem corporativa. A aplicação utiliza autenticação JWT (JSON Web Tokens) e permite que usuários criem, listem e atualizem pedidos de viagem, com autorização baseada em políticas do Laravel (apenas administradores podem aprovar/cancelar solicitações).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Funcionalidades principais
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Autenticação JWT**: Registro de usuários com suporte a códigos de administrador
+- **Gestão de pedidos de viagem**: CRUD completo para solicitações
+- **Autorização por permissões**: Usuários comuns podem ver seus próprios pedidos; apenas admins podem atualizar status
+- **Filtros avançados**: Busca por status, destino e intervalos de datas (ida e volta)
+- **Testes automatizados**: Suíte de testes PHPaint para garantir qualidade
+- **Documentação Swagger**: OpenAPI 3.0 completo com exemplos
 
-## Learning Laravel
+## Requisitos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- Git
+- Docker Engine + Docker Compose
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Portas usadas localmente:
 
-## Laravel Sponsors
+- API (nginx): 80
+- Swagger UI: 3000
+- MySQL: 3306
+- Redis: 6379
+- Mailcatcher (SMTP): 1025
+- Mailcatcher (UI): 1080
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Stack
 
-### Premium Partners
+- PHP 8.4 + Laravel 12
+- MySQL 8
+- Redis
+- JWT (tymon/jwt-auth)
+- Spatie/Laravel Query Builder (filtros e ordenação)
+- Swagger UI (docker)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Setup rápido (Docker)
 
-## Contributing
+1) Clone o repositório
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+git clone git@github.com:VidalCamargos/swiftfly.git
+cd swiftfly
+```
 
-## Code of Conduct
+2) Suba os containers
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+docker compose up -d --build
+```
 
-## Security Vulnerabilities
+Na primeira inicialização, o container `api` roda uma automação (`provision/scripts/entrypoint.sh`) que:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Copia `.env.example` → `.env` (se ainda não existir)
+- Instala dependências com `composer install`
+- Gera chave da aplicação com `php artisan key:generate`
+- Gera segredo JWT com `php artisan jwt:secret`
+- Executa `php artisan migrate:fresh --seed` para criar o banco e popular dados
 
-## License
+Para acompanhar os logs:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+docker compose logs -f api
+```
+
+## URLs
+
+- API: `http://localhost/v1` ou `http://api.swiftfly.localhost/v1`
+- Swagger UI: `http://localhost:3000` (especificação em `openapi.yml`)
+- Mailcatcher UI: `http://localhost:1080` (para testar envio de emails)
+
+## Como listar rotas
+
+```bash
+docker compose exec api php artisan route:list
+```
+
+## Autenticação (JWT)
+
+A API utiliza autenticação JWT para acesso às rotas. Veja os endpoints, payloads e exemplos completos na documentação Swagger.
+ 
+Após login/registro, use o token no header:
+
+```text
+Authorization: Bearer <token>
+```
+
+**Nota**: Para criar usuário administrador, envie o parâmetro `admin_code` (padrão no `.env.example`: `ADMIN_CODE=swiftfly-admin`).
+
+## Pedidos de viagem (Travel Orders)
+
+Todos os endpoints, filtros, schemas e exemplos estão documentados no Swagger: `http://localhost:3000`
+
+### Fluxo de uso
+
+1. Faça login ou registro na API usando os endpoints `/auth/login` ou `/auth/register`
+2. Utilize o token JWT retornado nos headers `Authorization: Bearer <token>`
+3. Crie pedidos de viagem com dados de destino e datas
+4. Liste e filtre seus pedidos por status, destino e intervalos de datas
+5. Apenas administradores podem aprovar ou cancelar pedidos
+
+## Rodar testes
+
+```bash
+docker compose exec api php artisan test
+```
+
+## Troubleshooting
+
+- Recriar banco/seed:
+
+```bash
+docker compose exec api php artisan migrate:fresh --seed
+```
+
+- Para repetir a automação de inicialização, remova o arquivo de controle e reinicie o container:
+
+```bash
+rm -f .docker_setup_completed
+docker compose restart api
+```

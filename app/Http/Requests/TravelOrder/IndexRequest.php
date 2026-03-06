@@ -16,7 +16,7 @@ class IndexRequest extends FormRequest
             'filter.departure_start_date' => ['sometimes', 'date_format:Y-m-d H:i:s'],
             'filter.departure_end_date' => ['sometimes', 'date_format:Y-m-d H:i:s'],
             'filter.return_start_date' => ['sometimes', 'date_format:Y-m-d H:i:s'],
-            'filter.end_date' => ['sometimes', 'date_format:Y-m-d H:i:s'],
+            'filter.return_end_date' => ['sometimes', 'date_format:Y-m-d H:i:s'],
         ];
     }
 }
