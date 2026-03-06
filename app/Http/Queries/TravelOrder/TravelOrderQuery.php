@@ -18,7 +18,7 @@ class TravelOrderQuery extends QueryBuilder
             AllowedFilter::exact('status'),
             AllowedFilter::callback(
                 'destination',
-                fn ($query, $value) => $query->where('destination', 'LIKE', "%{$value}%")
+                fn ($query, $value) => $query->where('destination', 'LIKE', "%{$value}%"),
             ),
             AllowedFilter::custom('departure_start_date', new FilterDateGreaterThan(), 'departure_date'),
             AllowedFilter::custom('departure_end_date', new FilterDateLessThan(), 'departure_date'),

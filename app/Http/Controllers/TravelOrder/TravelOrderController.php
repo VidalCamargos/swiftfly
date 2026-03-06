@@ -26,7 +26,7 @@ class TravelOrderController extends Controller
         $this->authorize('viewAny', TravelOrder::class);
 
         return TravelOrderResource::collection(
-            $travelOrderQuery->simplePaginate($request->input('limit', 10))
+            $travelOrderQuery->simplePaginate($request->input('limit', 10)),
         );
     }
 
@@ -35,7 +35,7 @@ class TravelOrderController extends Controller
         $this->authorize('view', [TravelOrder::class, $travelOrder]);
 
         return TravelOrderResource::make(
-            $travelOrderQuery->where('id', $travelOrder->id)->firstOrFail()
+            $travelOrderQuery->where('id', $travelOrder->id)->firstOrFail(),
         );
     }
 

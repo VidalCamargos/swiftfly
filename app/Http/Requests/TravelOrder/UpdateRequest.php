@@ -15,7 +15,7 @@ class UpdateRequest extends FormRequest
                 'required',
                 'string',
                 Rule::in(Status::possibleUpdateStatus()),
-                Rule::prohibitedIf(fn () => $this->route('travelOrder')->status->isApproved())
+                Rule::prohibitedIf(fn () => $this->route('travelOrder')->status->isApproved()),
             ],
         ];
     }

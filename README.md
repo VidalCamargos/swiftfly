@@ -109,6 +109,38 @@ Todos os endpoints, filtros, schemas e exemplos estão documentados no Swagger: 
 docker compose exec api php artisan test
 ```
 
+## Qualidade de código e refatoração
+
+O projeto utiliza **Rector** (refatoração automatizada) e **ECS** (EasyCodingStandard - PSR-12 + Laravel) para manter a qualidade e consistência do código.
+
+### Rector
+
+Reforça melhores práticas e moderniza o código (PHP 8.4, Laravel 12).
+
+```bash
+docker compose exec api vendor/bin/rector
+```
+
+Para ver o que será modificado sem aplicar as mudanças:
+
+```bash
+docker compose exec api vendor/bin/rector --dry-run
+```
+
+### ECS (EasyCodingStandard)
+
+Aplica PSR-12 e regras específicas de Laravel (formato curto de arrays, 120 caracteres por linha, etc.).
+
+```bash
+docker compose exec api vendor/bin/ecs --fix
+```
+
+Para verificar sem modificar:
+
+```bash
+docker compose exec api vendor/bin/ecs
+```
+
 ## Troubleshooting
 
 - Recriar banco/seed:

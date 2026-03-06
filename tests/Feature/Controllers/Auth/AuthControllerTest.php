@@ -36,7 +36,7 @@ class AuthControllerTest extends TestCase
                 'jit' => $this->user->id + 1,
                 'expires_at' => now()->addDays(10)->timestamp,
                 'token' => 'test',
-                'type' => 'bearer'
+                'type' => 'bearer',
             ]);
 
         $this->app->instance(JwtService::class, $jwtMock);
@@ -47,7 +47,7 @@ class AuthControllerTest extends TestCase
                 'jit' => $this->user->id + 1,
                 'expires_at' => now()->addDays(10)->timestamp,
                 'token' => 'test',
-                'type' => 'bearer'
+                'type' => 'bearer',
             ]);
 
         $this->assertDatabaseCount(User::class, 2);
@@ -60,7 +60,7 @@ class AuthControllerTest extends TestCase
             'name' => 'Gustavo',
             'email' => 'gustavo@test.com',
             'password' => 'Gu12345678!',
-            'password_confirmation' => 'Gu12345678!'
+            'password_confirmation' => 'Gu12345678!',
         ];
 
         yield 'without admin code' => [
@@ -93,7 +93,7 @@ class AuthControllerTest extends TestCase
                 'jit' => $this->user->id,
                 'expires_at' => now()->addDays(10)->timestamp,
                 'token' => 'test',
-                'type' => 'bearer'
+                'type' => 'bearer',
             ]);
 
         $this->app->instance(JwtService::class, $jwtMock);
@@ -161,7 +161,7 @@ class AuthControllerTest extends TestCase
                 'password' => 'Password123!',
                 'password_confirmation' => 'Password123!',
             ],
-            ['email' => ['O campo email é obrigatório.']]
+            ['email' => ['O campo email é obrigatório.']],
         ];
 
         yield 'invalid email' => [
@@ -171,7 +171,7 @@ class AuthControllerTest extends TestCase
                 'password' => 'Password123!',
                 'password_confirmation' => 'Password123!',
             ],
-            ['email' => ['O campo email deve ser um endereço de e-mail válido.']]
+            ['email' => ['O campo email deve ser um endereço de e-mail válido.']],
         ];
 
         yield 'without name' => [
@@ -180,7 +180,7 @@ class AuthControllerTest extends TestCase
                 'password' => 'Password123!',
                 'password_confirmation' => 'Password123!',
             ],
-            ['name' => ['O campo nome é obrigatório.']]
+            ['name' => ['O campo nome é obrigatório.']],
         ];
 
         yield 'without password' => [
@@ -188,7 +188,7 @@ class AuthControllerTest extends TestCase
                 'name' => 'Gustavo',
                 'email' => 'test@test.com',
             ],
-            ['password' => ['O campo senha é obrigatório.']]
+            ['password' => ['O campo senha é obrigatório.']],
         ];
 
         yield 'invalid password' => [
@@ -200,10 +200,10 @@ class AuthControllerTest extends TestCase
             ],
             [
                 'password' => [
-                'O campo senha de confirmação não confere.',
-                'O campo senha deve conter pelo menos um número.',
-                'O campo senha deve conter pelo menos um símbolo.',
-                'O campo senha deve ter pelo menos 8 caracteres.',
+                    'O campo senha de confirmação não confere.',
+                    'O campo senha deve conter pelo menos um número.',
+                    'O campo senha deve conter pelo menos um símbolo.',
+                    'O campo senha deve ter pelo menos 8 caracteres.',
                 ],
             ],
         ];
@@ -215,7 +215,7 @@ class AuthControllerTest extends TestCase
                 'password' => 'Password123!',
                 'password_confirmation' => 'other password',
             ],
-            ['password' => ['O campo senha de confirmação não confere.']]
+            ['password' => ['O campo senha de confirmação não confere.']],
         ];
 
         yield 'invalid admin code' => [
@@ -224,9 +224,9 @@ class AuthControllerTest extends TestCase
                 'email' => 'test@test.com',
                 'password' => 'Password123!',
                 'password_confirmation' => 'Password123!',
-                'admin_code' => 'invalid'
+                'admin_code' => 'invalid',
             ],
-            ['admin_code' => ['O código de administrador está incorreto!']]
+            ['admin_code' => ['O código de administrador está incorreto!']],
         ];
     }
 }

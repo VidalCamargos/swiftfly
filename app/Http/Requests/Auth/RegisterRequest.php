@@ -18,9 +18,9 @@ class RegisterRequest extends FormRequest
             'password' => [
                 'required',
                 'confirmed',
-                Password::min(8)->max(255)->letters()->numbers()->symbols()
+                Password::min(8)->max(255)->letters()->numbers()->symbols(),
             ],
-            'admin_code' => ['sometimes', 'string', new ValidateAdminCode()]
+            'admin_code' => ['sometimes', 'string', new ValidateAdminCode()],
         ];
     }
 
