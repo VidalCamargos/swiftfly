@@ -39,7 +39,7 @@ class NotifyStatusChangedTest extends TestCase
         $travelOrder->update(['status' => $newStatus]);
 
         $updatedEvent = new Updated($travelOrder);
-        $notifyStatusChangedListener = app(NotifyStatusChanged::class);
+        $notifyStatusChangedListener = resolve(NotifyStatusChanged::class);
 
         $this->assertTrue($notifyStatusChangedListener->shouldQueue($updatedEvent));
         $notifyStatusChangedListener->handle($updatedEvent);
@@ -79,7 +79,7 @@ class NotifyStatusChangedTest extends TestCase
         $travelOrder->update(['destination' => 'New destination']);
 
         $updatedEvent = new Updated($travelOrder);
-        $notifyStatusChangedListener = app(NotifyStatusChanged::class);
+        $notifyStatusChangedListener = resolve(NotifyStatusChanged::class);
 
         $this->assertFalse($notifyStatusChangedListener->shouldQueue($updatedEvent));
 
