@@ -14,6 +14,7 @@ use Tests\TestCase;
 class TravelOrderControllerTest extends TestCase
 {
     private User $user;
+
     private User $admin;
 
     #[Override]
@@ -267,7 +268,7 @@ class TravelOrderControllerTest extends TestCase
 
         $expectedIds = array_map(
             static fn (string $key) => $created[$key]->id,
-            $expectedKeys
+            $expectedKeys,
         );
 
         $this->setUserAuthentication($this->user)

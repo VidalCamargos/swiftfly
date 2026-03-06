@@ -62,7 +62,7 @@ class NotifyStatusChangedTest extends TestCase
                 );
 
                 return true;
-            }
+            },
         );
     }
 
