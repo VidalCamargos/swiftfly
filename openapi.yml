@@ -1,0 +1,487 @@
+openapi: 3.0.3
+
+info:
+  title: SwiftFly API
+  version: 1.0.0
+  description: |
+    API REST do SwiftFly (Laravel + JWT).
+
+servers:
+  - url: http://api.swiftfly.localhost/v1
+    description: Local (docker-compose + nginx)
+
+tags:
+  - name: Health
+  - name: Auth
+  - name: Travel Orders
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    ForbiddenResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        message:
+          type: string
+
+    ValidationErrorResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+    TokenResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        token:
+          type: string
+          description: JWT para usar no header Authorization.
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+        jti:
+          type: string
+          description: Token ID (claim jti).
+          example: 7c1a8d76-9a3c-4a07-a5be-5d0d6f0c6c2a
+        expires_at:
+          type: integer
+          format: int64
+          description: Timestamp (epoch seconds) do claim exp.
+          example: 1893456000
+        type:
+          type: string
+          enum: [bearer]
+      required:
+        - token
+        - jti
+        - expires_at
+        - type
+
+    RegisterRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 255
+          example: Gustavo
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          example: gustavo@test.com
+        password:
+          type: string
+          minLength: 8
+          maxLength: 255
+          example: Gu12345678!
+        password_confirmation:
+          type: string
+          example: Gu12345678!
+        admin_code:
+          type: string
+          description: |
+            Opcional. Se o código for válido, o usuário é criado como admin.
+          example: swiftfly-admin
+      required:
+        - name
+        - email
+        - password
+        - password_confirmation
+
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          format: email
+          example: gustavo@test.com
+        password:
+          type: string
+          example: password
+      required:
+        - email
+        - password
+
+    TravelOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        requester_name:
+          type: string
+          example: Gustavo
+        destination:
+          type: string
+          example: Sao Paulo
+        status:
+          type: string
+          enum: [requested, approved, canceled]
+          example: requested
+        departure_date:
+          type: string
+          format: date-time
+          example: 2099-01-01T00:00:00+00:00
+        return_date:
+          type: string
+          format: date-time
+          nullable: true
+          example: 2099-01-02T00:00:00+00:00
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - requester_name
+        - destination
+        - status
+        - departure_date
+        - return_date
+        - created_at
+        - updated_at
+
+    TravelOrderResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/TravelOrder'
+      required:
+        - data
+
+    TravelOrderPaginatedResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelOrder'
+        links:
+          type: object
+          additionalProperties: true
+        meta:
+          type: object
+          additionalProperties: true
+      required:
+        - data
+
+    StoreTravelOrderRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        destination:
+          type: string
+          minLength: 3
+          maxLength: 255
+          example: Paris
+        departure_date:
+          type: string
+          description: 'Formato: Y-m-d H:i:s (deve ser posterior à agora)'
+          example: 2099-01-01 00:00:00
+        return_date:
+          type: string
+          description: 'Formato: Y-m-d H:i:s (deve ser posterior à departure_date)'
+          example: 2099-01-02 00:00:00
+      required:
+        - destination
+        - departure_date
+
+    UpdateTravelOrderRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          enum: [approved, canceled]
+          example: approved
+      required:
+        - status
+
+paths:
+  /ping:
+    get:
+      tags: [Health]
+      summary: Healthcheck
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: pong
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Registrar usuário e retornar token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login e retorno de token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Logout (invalida sessão atual)
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /travel-orders:
+    get:
+      tags: [Travel Orders]
+      summary: Listar pedidos de viagem do usuário autenticado
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            format: int32
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Itens por pagina (simplePaginate)
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [departure_date, -departure_date]
+          description: Ordenação (Spatie QueryBuilder)
+        - in: query
+          name: filter[status]
+          schema:
+            type: string
+            enum: [requested, approved, canceled]
+        - in: query
+          name: filter[destination]
+          schema:
+            type: string
+        - in: query
+          name: filter[departure_start_date]
+          schema:
+            type: string
+            example: 2099-01-01 00:00:00
+        - in: query
+          name: filter[departure_end_date]
+          schema:
+            type: string
+            example: 2099-01-31 00:00:00
+        - in: query
+          name: filter[return_start_date]
+          schema:
+            type: string
+            example: 2099-01-01 00:00:00
+        - in: query
+          name: filter[return_end_date]
+          schema:
+            type: string
+            example: 2099-01-31 00:00:00
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelOrderPaginatedResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags: [Travel Orders]
+      summary: Criar pedido de viagem
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreTravelOrderRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelOrderResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+  /travel-orders/{travelOrder}:
+    get:
+      tags: [Travel Orders]
+      summary: Exibir um pedido de viagem
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: travelOrder
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelOrderResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found
+
+    put:
+      tags: [Travel Orders]
+      summary: Atualizar status do pedido (apenas admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: travelOrder
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTravelOrderRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelOrderResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'

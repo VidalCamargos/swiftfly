@@ -1,0 +1,302 @@
+type: collection.insomnia.rest/5.0
+name: swiftfly
+meta:
+  id: wrk_65f7c8af9a1746a3a90f7f4be2b6a463
+  created: 1772587627139
+  modified: 1772587627139
+  description: ""
+collection:
+  - name: Auth
+    meta:
+      id: fld_59da3c5846534a2f999855e6ac1e7e13
+      created: 1772649858927
+      modified: 1772649858927
+      sortKey: -1772649858927
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/auth/register"
+        name: register
+        meta:
+          id: req_c67e1a66f37a411fb7145d5ac31143b1
+          created: 1772649860771
+          modified: 1772802465542
+          isPrivate: false
+          description: ""
+          sortKey: -1772649860771
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Test",
+            	"email": "test@example.com",
+            	"password": "Password123!",
+            	"password_confirmation": "Password123!"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/auth/login"
+        name: login
+        meta:
+          id: req_ba231f62f37e4a1086625610b47f055f
+          created: 1772650035100
+          modified: 1772802474776
+          isPrivate: false
+          description: ""
+          sortKey: -1772618745936
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email": "test@example.com",
+            	"password": "Password123!"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/auth/logout"
+        name: logout
+        meta:
+          id: req_f8d4ff14fdb94ee5801bedc0f222b04b
+          created: 1772650096664
+          modified: 1772793628734
+          isPrivate: false
+          description: ""
+          sortKey: -1772603188518.5
+        method: POST
+        headers:
+          - name: User-Agent
+            value: insomnia/11.3.0
+            id: pair_82592e58e50d46b89d8adc6ae2e4daa5
+          - id: pair_0a33535a5e7c4701917dc0f5f9f4c9b2
+            name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+          - id: pair_e91016a2020b4c01abc8a5892b4aeb1f
+            name: ""
+            value: ""
+            description: ""
+            disabled: true
+        authentication:
+          type: bearer
+          token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLnN3aWZ0Zmx5LmxvY2FsaG9zdC92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzcyNzkzNjIwLCJleHAiOjE3NzI3OTcyMjAsIm5iZiI6MTc3Mjc5MzYyMCwianRpIjoiMmFsYkRQNmxvMWVZQ1VMciIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwidXNlcl9pZCI6Mn0.dz02d_67ZJCDUDQdDF8JGyetWh56VJtCB3B92S6aFUw
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: TravelOrders
+    meta:
+      id: fld_6f1f9247ef974f7da724e8161e61ed07
+      created: 1772675053571
+      modified: 1772675053571
+      sortKey: -1772675053571
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/travel-orders"
+        name: index
+        meta:
+          id: req_4712aa27f2d8440e9f3d6327e44bce59
+          created: 1772675055422
+          modified: 1772802494138
+          isPrivate: false
+          description: ""
+          sortKey: -1772675055422
+        method: GET
+        parameters:
+          - id: pair_6680b18876ca40039e8e68384adf7d49
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/travel-orders"
+        name: store
+        meta:
+          id: req_cec490f67b8d418c91dbd62644e931d9
+          created: 1772793655054
+          modified: 1772793734838
+          isPrivate: false
+          description: ""
+          sortKey: -1772793655054
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"destination": "Brazil",
+            	"departure_date": "2026-05-01 01:01:01"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/travel-orders/1"
+        name: show
+        meta:
+          id: req_8ac774f4b47f4886a4c6fe07057cd502
+          created: 1772793750557
+          modified: 1772801573553
+          isPrivate: false
+          description: ""
+          sortKey: -1772662458096.5
+        method: GET
+        parameters:
+          - id: pair_878389edebef45dd93f51903179548b8
+            name: filter[status]
+            value: canceled
+            description: ""
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/11.3.0
+            id: pair_8d0cc628369b44a9a28c53439cfe8295
+          - id: pair_63326f8567cd435081f9513fc3f25503
+            name: Accept
+            value: application/json
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/travel-orders/3"
+        name: put
+        meta:
+          id: req_a4bd32fb715742efa11534e507910747
+          created: 1772801474355
+          modified: 1772801520893
+          isPrivate: false
+          description: ""
+          sortKey: -1772801474355
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"status": "approved"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.3.0
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - url: "{{ _.base_url }}/ping"
+    name: Ping
+    meta:
+      id: req_6e45f2e16ec74f1f9e6c1d3deedcfd1c
+      created: 1772587631101
+      modified: 1772801792986
+      isPrivate: false
+      description: ""
+      sortKey: -1772587631101
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+        id: pair_01db968d597f4beb972edc24d11bc868
+      - id: pair_6645609f415f4ea09815a46b4fa1117a
+        name: Accept
+        value: application/json
+        description: ""
+        disabled: false
+      - id: pair_766db4c3ba6e4e029c59e0621e4c0526
+        name: Content-Type
+        value: application/json
+        description: ""
+        disabled: true
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_939ad680d3a22f7d03fb44fdab612c2d8341ed9e
+    created: 1772587627146
+    modified: 1772587627146
+environments:
+  name: Base Environment
+  meta:
+    id: env_939ad680d3a22f7d03fb44fdab612c2d8341ed9e
+    created: 1772587627141
+    modified: 1772675142604
+    isPrivate: false
+  data:
+    base_url: http://api.swiftfly.localhost/v1
+    token: "{% response 'body', 'req_ba231f62f37e4a1086625610b47f055f',
+      'b64::JC50b2tlbg==::46b', 'never', 60 %}"
