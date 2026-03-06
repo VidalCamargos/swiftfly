@@ -53,6 +53,13 @@ cd swiftfly
 docker compose up -d --build
 ```
 
+3) Teste se a API está respondendo
+
+```bash
+curl http://api.swiftfly.localhost/v1/ping
+# Deve retornar: "pong"
+```
+
 Na primeira inicialização, o container `api` roda uma automação (`provision/scripts/entrypoint.sh`) que:
 
 - Copia `.env.example` → `.env` (se ainda não existir)
@@ -69,9 +76,46 @@ docker compose logs -f api
 
 ## URLs
 
-- API: `http://localhost/v1` ou `http://api.swiftfly.localhost/v1`
+- API: `http://api.swiftfly.localhost/v1`
 - Swagger UI: `http://localhost:3000` (especificação em `openapi.yml`)
 - Mailcatcher UI: `http://localhost:1080` (para testar envio de emails)
+
+## Usuário inicial
+
+Após o `migrate:fresh --seed`, o projecto cria um usuário administrador com acesso pré-configurado:
+
+- **Email**: `admin@example.com`
+- **Senha**: `Password123!`
+- **Perfil**: Administrador
+
+Faça login com ele para começar a usar a API:
+```bash
+curl -s -X POST "http://api.swiftfly.localhost/v1/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"Password123!"}'
+```
+
+## Filas (Queues)
+
+O projeto usa **Redis** como driver de filas (`QUEUE_CONNECTION=redis` no `.env`). Para consumir jobs em produção ou local:
+
+```bash
+docker compose exec api php artisan queue:work
+```
+
+Caso queira processamento síncrono (útil para desenvolvimento), altere a variável de ambiente:
+```bash
+QUEUE_CONNECTION=sync
+```
+
+## Coleção de requisições (Insomnia)
+
+Para facilitar o teste, foi disponibilizada uma coleção de requisições completa do Insomnia:
+- **Arquivo**: `provision/requests insomnia/swiftfly-insomnia.yaml`
+- Conteúdo: Todos os endpoints de autenticação e pedidos de viagem
+- Variáveis de ambiente já configuradas: `base_url` e `token`
+
+Importe-o diretamente no Insomnia e comece a testar sem precisar configurar nada adicional.
 
 ## Como listar rotas
 
