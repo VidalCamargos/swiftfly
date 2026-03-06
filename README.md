@@ -12,7 +12,7 @@ O SwiftFly é uma API REST desenvolvida em Laravel 12 com PHP 8.4, projetada par
 - **Gestão de pedidos de viagem**: CRUD completo para solicitações
 - **Autorização por permissões**: Usuários comuns podem ver seus próprios pedidos; apenas admins podem atualizar status
 - **Filtros avançados**: Busca por status, destino e intervalos de datas (ida e volta)
-- **Testes automatizados**: Suíte de testes PHPaint para garantir qualidade
+- **Testes automatizados**: Suíte de testes utilizando phpunit para garantir qualidade
 - **Documentação Swagger**: OpenAPI 3.0 completo com exemplos
 
 ## Requisitos
